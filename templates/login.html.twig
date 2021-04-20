@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+	
+
+	<section>
+		<div class="block gray ">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-6 col-md-offset-3">
+						<div class="account-popup-sec static-popup">
+							<div class="acount-popup login-popup">
+								<h3>LOGIN</h3>
+								<div style="color: red;font-weight: bold;">{{ message }}</div>
+								<form action="{{ path('index_login') }}" method="post">
+									<input name="submitted" type="hidden" value="1" />
+									<div class="field-form">
+										<input name="email" class="effect-16" type="text" placeholder="">
+							            <label>E-Mail Address</label>
+							            <span class="focus-border"></span>
+									</div>
+									<div class="field-form">
+										<input name="password" class="effect-16" type="password" placeholder="">
+							            <label>Password</label>
+							            <span class="focus-border"></span>
+									</div>
+									<a href="{{ path('index_passwordreset') }}" title="">Lost your password</a>
+									<button type="submit">LOGIN</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+{% endblock %}

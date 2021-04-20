@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+	<section>
+		<div class="block no-padding">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="inner-header">
+							<h2>DrinkMe URL Shortener</h2>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section>
+		<div class="block gray ">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-10 col-md-offset-1">
+						<div class="add-listing-sec">
+							{% if error != '' %}
+								<div style="text-align: center;color:red;margin: 10px;font-weight: bold;">{{ error }}</div>
+							{% endif %}
+							<form method="post">
+								<input name="submitted" type="hidden" value="1" />
+								<div class="form-listing">
+									<div class="row">
+										<div class="col-md-12">
+											<input tabindex="1" value="{{ url }}" name="url" type="text" placeholder="Enter URL Shorten...." />
+										</div>
+									</div>
+								</div>
+								<div class="submission-btns">
+									<button tabindex="8" type="submit">Submit URL</button>
+								</div>
+							</form>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+{% endblock %}

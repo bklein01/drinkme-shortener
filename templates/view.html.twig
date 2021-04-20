@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+	<section>
+		<div class="block no-padding">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="inner-header">
+							<h2>About DrinkMe Link</h2>
+							<ul class="breadcrumbs">
+								<li><a href="{{ path('index_index') }}" title="">Home</a></li>
+								<li>View</li>
+							</ul>	
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section>
+		<div class="block gray ">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-10 col-md-offset-1">
+						<div class="add-listing-sec">
+								<div class="form-listing">
+									<div class="row">
+										<div class="col-md-3">
+											URL:
+										</div>
+										<div class="col-md-9">
+											{{ link.url }}
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-3">
+											Short Code:
+										</div>
+										<div class="col-md-9">
+											<a href="/{{ link.shortCode }}" target="_new">{{ link.shortCode }}</a>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-md-3">
+											# Redirects:
+										</div>
+										<div class="col-md-9">
+											<a href="/{{ link.redirects }}" target="_new">{{ link.shortCode }}</a>
+										</div>
+									</div>
+								</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+{% endblock %}
