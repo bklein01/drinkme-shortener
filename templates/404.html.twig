@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+
+	<section>
+		<div class="block no-padding">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="inner-header">
+							<h2>Invalid URL</h2>
+							<ul class="breadcrumbs">
+								<li><a href="{{ path('index_index') }}" title="">Home</a></li>
+								<li>Invalid URL</li>
+							</ul>	
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<section>
+		<p style="text-align: center">The URL you are using is invalid.</p>
+	</section>
+
+{% endblock %}

@@ -6,15 +6,12 @@ use App\Service\Config;
 
 class BaseDocument
 {
-    public static function getOneBy($params, $options = [])
+    public static function getOneBy($collection, $params, $options = array())
     {
-        $config = new Config();
-        $manager = new \MongoDB\Driver\Manager($config->getMongodbUrl());
-        $objectname = get_called_class();
-        $collection = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $objectname));
-        $collection = str_replace('app\\document\\', '', $collection);
-        $query = new \MongoDB\Driver\Query($params);
-        $results = $manager->executeQuery('rate-my-shopper.'.$collection, $query);
+    	$config = new Config();
+        $mongo = new \MongoDB\Driver\Manager($config->getMongodbUrl().'/'.$config->getMongodbDatabase());
+        $query = new \MongoDB\Driver\Query($params, $options);
+		$results = $mongo->executeQuery($config->getMongodbDatabase().'.'.$collection, $query);
         $results = iterator_to_array($results);
         $objectname = get_called_class();
         $object = new $objectname();
@@ -36,14 +33,8 @@ class BaseDocument
         return $object;
     }
 
-    public static function getBy($params, $sort = [], $limit = '', $offset = '')
+    public static function getBy($collection, $params, $limit = '', $offset = '', $sort = array())
     {
-        $config = new Config();
-        $manager = new \MongoDB\Driver\Manager($config->getMongodbUrl());
-        $objectname = get_called_class();
-        $collectionName = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $objectname));
-        $collectionName = str_replace('app\\document\\', '', $collectionName);
-        $collectionName = $collectionName;
         if ((int) $limit > 0) {
             if ($offset == '') {
                 $offset = 0;
@@ -52,30 +43,24 @@ class BaseDocument
             $limit = 0;
             $offset = 0;
         }
+        $options = array();
         if (sizeof($sort) > 0) {
+        	$options['sort'] = $sort;
             if ($limit > 0) {
-                $query = new \MongoDB\Driver\Query($params, ['limit' => $limit, 'skip' => $offset]);
-                $results = $manager->executeQuery('rate-my-shopper.'.$collectionName, $query);
-                //$results = $mongo->inspecs->$collectionName->find($params)->sort($sort)->limit($limit)->skip($offset);
-                $results = iterator_to_array($results);
-            } else {
-                $query = new \MongoDB\Driver\Query($params);
-                $results = $manager->executeQuery('rate-my-shopper.'.$collectionName, $query);
-                //$results = $mongo->inspecs->$collectionName->find($params)->sort($sort); //->sort($sort);
-                $results = iterator_to_array($results);
+            	$options['limit'] = $limit;
+            	$options['skip'] = $offset;
             }
         } else {
+        	$options['sort'] = array();
             if ($limit > 0) {
-                $query = new \MongoDB\Driver\Query($params, ['limit' => $limit, 'skip' => $offset]);
-                $results = $manager->executeQuery('rate-my-shopper.'.$collectionName, $query);
-                //$results = $mongo->inspecs->$collectionName->find($params)->limit($limit)->skip($offset);
-                $results = iterator_to_array($results);
-            } else {
-                $query = new \MongoDB\Driver\Query($params);
-                $results = $manager->executeQuery('rate-my-shopper.'.$collectionName, $query);
-                //$results = $mongo->inspecs->$collectionName->find($params);
+            	$options['limit'] = $limit;
+            	$options['skip'] = $offset;
             }
         }
+        $config = new Config();
+        $mongo = new \MongoDB\Driver\Manager($config->getMongodbUrl().'/'.$config->getMongodbDatabase());
+        $query = new \MongoDB\Driver\Query($params, $options);
+		$results = $mongo->executeQuery($config->getMongodbDatabase().'.'.$collection, $query);
         $collection = [];
         foreach ($results as $result) {
             if ($result) {
@@ -96,29 +81,21 @@ class BaseDocument
         return $collection;
     }
 
-    public static function search($params)
+    public static function search($collection, $params)
     {
-        $config = new Config();
-        $mongo = new \MongoDB\Driver\Manager($config->getMongodbUrl());
-        $objectname = get_called_class();
-        $collectionName = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $objectname));
-        $collectionName = str_replace('app\\document\\', '', $collectionName);
-        $results = $mongo->inspecs->$collectionName->aggregate($params);
-        $collection = [];
-        foreach ($results as $result) {
-            $object = $objectname->getOneBy(['_id' => $result['_id']]);
-            $collection[] = $object;
-        }
-
-        return $collection;
+    	$config = new Config();
+        $mongo = new \MongoDB\Driver\Manager($config->getMongodbUrl().'/'.$config->getMongodbDatabase());
+        $query = new \MongoDB\Driver\Query($params, $options);
+		$results = $mongo->executeQuery($config->getMongodbDatabase().'.'.$collection, $query);
+        return json_decode(json_encode($results->toArray()), true);
     }
 
-    public function json_encode_objs($item)
+    public static function json_encode_objs($item)
     {
         if (!is_array($item) && !is_object($item)) {
             return json_encode($item);
         } else {
-            $pieces = [];
+            $pieces = array();
             foreach ($item as $k => $v) {
                 $pieces[] = "\"$k\":".$this->json_encode_objs($v);
             }
@@ -130,31 +107,52 @@ class BaseDocument
     public function create()
     {
         $config = new Config();
-        $mongo = new \MongoDB\Driver\Manager($config->getMongodbUrl());
+        $mongo = new \MongoDB\Driver\Manager($config->getMongodbUrl().'/'.$config->getMongodbDatabase());
         $objectname = get_called_class();
-        $collectionName = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $objectname));
-        $collectionName = str_replace('app\\document\\', '', $collectionName);
+        $collection = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $objectname));
+        $collection = str_replace('app\\document\\', '', $collection);
+        $classVars = get_class_vars(get_class($this));
         $data = [];
-        $class_vars = get_class_vars(get_class($this));
-        foreach ($class_vars as $name => $value) {
+        foreach ($classVars as $name => $value) {
             if (is_object($value)) {
                 $value = json_decode($this->json_encode_objs($value), true);
             }
             $data[$name] = $this->$name;
         }
-        $insRec = new \MongoDB\Driver\BulkWrite();
-        $insRec->insert($data);
-        $writeConcern = new \MongoDB\Driver\WriteConcern(\MongoDB\Driver\WriteConcern::MAJORITY, 1000);
-        $result = $mongo->executeBulkWrite('rate-my-shopper.'.$collectionName, $insRec, $writeConcern);
+        if ((int) $data['_id'] == 0) {
+            $options = array('sort' => array('_id' => -1));
+            $params = array('_id' => array('$type' => 'int'));
+        	$query = new \MongoDB\Driver\Query($params, $options);
+			$results = $mongo->executeQuery($config->getMongodbDatabase().'.'.$collection, $query);
+            $count = 0;
+            $latest = array();
+            foreach ($results as $result) {
+            	$latest = json_decode(json_encode($result), true);
+            	if ($count == 0) {
+            		break;
+            	}
+            	$count++;
+            }
+            if (sizeof($latest) > 0) {
+                $data['_id'] = (int) $latest['_id'] + 1;
+            } else {
+            	$data['_id'] = 1;
+            }
+        }
+        $bulk = new \MongoDB\Driver\BulkWrite(['ordered' => true]);
+		$bulk->insert($data);
+		$writeConcern = new \MongoDB\Driver\WriteConcern(\MongoDB\Driver\WriteConcern::MAJORITY, 1000);
+	    $result = $mongo->executeBulkWrite($config->getMongodbDatabase().'.'.$collection, $bulk, $writeConcern);
+        return $data;
     }
 
     public function update()
     {
         $config = new Config();
-        $mongo = new \MongoDB\Driver\Manager($config->getMongodbUrl());
+        $mongo = new \MongoDB\Driver\Manager($config->getMongodbUrl().'/'.$config->getMongodbDatabase());
         $objectname = get_called_class();
-        $collectionName = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $objectname));
-        $collectionName = str_replace('app\\document\\', '', $collectionName);
+        $collection = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $objectname));
+        $collection = str_replace('app\\document\\', '', $collection);
         $data = [];
         foreach ($this as $name => $value) {
             if (is_object($value)) {
@@ -162,19 +160,20 @@ class BaseDocument
             }
             $data[$name] = $value;
         }
-        $mongo->inspecs->$collectionName->update(
-            ['_id' => $data['_id']],
-            ['$set' => $data]
-        );
+        $bulk = new \MongoDB\Driver\BulkWrite(['ordered' => true]);
+        $bulk->update(['_id' => $data['_id']], ['$set' => $data]);
+        $writeConcern = new \MongoDB\Driver\WriteConcern(\MongoDB\Driver\WriteConcern::MAJORITY, 1000);
+	    $result = $mongo->executeBulkWrite($config->getMongodbDatabase().'.'.$collection, $bulk, $writeConcern);
+        return $data;
     }
 
     public function delete()
     {
         $config = new Config();
-        $mongo = new \MongoDB\Driver\Manager($config->getMongodbUrl());
+        $mongo = new \MongoDB\Driver\Manager($config->getMongodbUrl().'/'.$config->getMongodbDatabase());
         $objectname = get_called_class();
-        $collectionName = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $objectname));
-        $collectionName = str_replace('app\\document\\', '', $collectionName);
+        $collection = strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $objectname));
+        $collection = str_replace('app\\document\\', '', $collection);
         $data = [];
         foreach ($this as $name => $value) {
             if (is_object($value)) {
@@ -182,6 +181,9 @@ class BaseDocument
             }
             $data[$name] = $value;
         }
-        $mongo->inspecs->$collectionName->remove(['_id' => $data['_id']]);
+        $bulk = new \MongoDB\Driver\BulkWrite(['ordered' => true]);
+        $bulk->delete(['_id' => $data['_id']]);
+	    $result = $mongo->executeBulkWrite($config->getMongodbDatabase().'.'.$collection, $bulk);
+        return true;
     }
 }

@@ -10,11 +10,13 @@ use App\Documents\User;
 class Config
 {
     private $mongodbUrl;
+    private $mongodbDatabase;
     private $basePath;
 
     public function __construct()
     {
         $this->mongodbUrl = $_ENV['MONGODB_URL'];
+        $this->mongodbDatabase = $_ENV['MONGODB_DATABASE'];
         $this->basePath = $_ENV['BASE_PATH'];
     }
 
@@ -86,6 +88,14 @@ class Config
         return $this->mongodbUrl;
     }
 
+	/**
+     * @return array|false|string
+     */
+    public function getMongodbDatabase()
+    {
+        return $this->mongodbDatabase;
+    }
+    
     /**
      * @return array|false|string
      */

@@ -4,21 +4,20 @@ namespace App\Document;
 
 class Link extends BaseDocument
 {
-    private $id;
-    private $url;
-    private $shortCode;
-    private $redirects;
-    private $userId;
-    private $createdAt;
+    protected $_id;
+    protected $url;
+    protected $shortCode;
+    protected $redirects;
+    protected $createdAt;
 
     public function getId()
     {
-        return $this->id;
+        return $this->_id;
     }
 
     public function setId($value)
     {
-        $this->id = $value;
+        $this->_id = $value;
     }
 
     public function getUrl()
@@ -49,16 +48,6 @@ class Link extends BaseDocument
     public function setShortCode($value)
     {
         $this->shortCode = $value;
-    }
-
-    public function getUserId()
-    {
-        return $this->userId;
-    }
-
-    public function setUserId($value)
-    {
-        $this->userId = $value;
     }
 
     public function getCreatedAt()

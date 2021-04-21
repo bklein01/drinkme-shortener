@@ -2,11 +2,8 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="">
-<meta name="keywords" content="">
-<meta name="author" content="creativelayers">
 
-<title>Rate My Shopper - Consumer based place to rate personal shoppers</title>
+<title>DrinkME: URL Shortener</title>
 
 <!-- Styles -->
 <link rel="stylesheet" href="/theme/css/bootstrap.min.css" type="text/css" /><!-- Bootstrap -->
@@ -45,64 +42,11 @@
 <div class="theme-layout">
 
 	<div class="responive-header">
-		<div class="logo"><a href="{{ path('index_index') }}" title=""><img src="/rate-my-shopper-logo-white-small.png" alt="" /></a></div>
-		{# <span class="open-responsive-btn"><i class="la la-bars"></i><i class="la la-close"></i></span> #}
-		<div class="resp-btn-sec">
-			<div class="acount-header-btn">
-				{% if user == '' %}
-					<span class="register-btn">Register</span>/
-					<span class="login-btn">Login</span>
-				{% else %}
-					<a class="logout-btn" href="{{ path('index_logout') }}">Logout</a>
-				{% endif %}
-			</div>
-			<a href="{{ path('index_add') }}" title="Post Rating" class="add-listing-btn"><i class="la la-plus"></i>Post Rating</a>
-			{#
-			<div class="search-header">
-				<span class="open-search"><i class="la la-search"></i><i class="la la-close"></i></span>
-				<form>
-					<input type="text" placeholder="Search">
-				</form>
-			</div>
-			#}
-		</div>
-		{#
-		<div class="responisve-menu">
-			<span class="close-reposive"><i class="la la-close"></i></span>
-			<div class="logo"><a href="{{ path('index_index')}}" title=""><img src="/rate-my-shopper-logo-white-small.png" alt="" /></a></div>
-			<ul>
-				<li><a href="{{ path('index_index') }}" title="">Home</a></li>
-			</ul>
-		</div>
-		#}
+		<div class="logo"><a href="{{ path('index_index') }}" title="">DrinkME URL Shortener</div>
 	</div><!-- Responsive-header -->
 	
 	<header class="on-top dark">
-		<div class="logo"><a href="{{ path('index_index') }}" title=""><img src="/rate-my-shopper-logo-white-small.png" alt="" /></a></div>
-		<div class="menu-sec">
-			<div class="acount-header-btn">
-				{% if user == '' %}
-					<span class="register-btn">Register</span>/
-					<span class="login-btn">Login</span>
-				{% else %}
-					<a class="logout-btn" href="{{ path('index_logout') }}">Logout</a>
-				{% endif %}
-			</div>
-			<a href="{{ path('index_add') }}" title="" class="add-listing-btn"><i class="la la-plus"></i>Post Rating</a>
-			{#
-			<div class="search-header">
-				<span class="open-search"><i class="la la-search"></i><i class="la la-close"></i></span>
-				<form>
-					<input type="text" placeholder="Search">
-				</form>
-			</div>
-			<nav class="header-menu">
-				<ul>
-					<li><a href="{{ path('index_index') }}" title="">Home</a></li>
-				</ul>
-			</nav>
-			#}
-		</div>
+		<div class="logo"><a href="{{ path('index_index') }}" title="">DrinkME Url Shortener</a></div>
 	</header>
 
     {%block content %}{% endblock %}
@@ -111,36 +55,18 @@
 		<div class="block remove-bottom">
 			<div class="container">
 				<div class="row">
-					<div class="col-md-4 column">
+					<div class="col-md-6 column">
 						<div class="widget">
-							<h3 class="footer-title">RATE MY SHOPPER</h3>
+							<h3 class="footer-title">DrinkME URL Shortener</h3>
 							<div class="about-widget">
-								<p>Rate My Shopper is the place where you can rate and view rates of personal shoppers for different shopping services. This way you can choose to use the shopping services with the best shoppers.</p>
+								<p>If you drink it, you will shrink.</p>
 								<ul>
 									<li><div class="addthis_inline_share_toolbox"></div></li>
-									{#
-									<li><a href="#" title=""><i class="la la-twitter"></i></a></li>
-									<li><a href="#" title=""><i class="la la-instagram"></i></a></li>
-									<li><a href="#" title=""><i class="la la-facebook "></i></a></li>
-									<li><a href="#" title=""><i class="la la-linkedin "></i></a></li>
-									#}
 								</ul>
 							</div>
 						</div><!-- Widget -->
 					</div>
-					<div class="col-md-4 column">
-						<div class="widget">
-							<h3 class="footer-title">SERVICES</h3>
-							<div class="link-widget">
-								<ul>
-									{% for service in services %}
-									<li><a href="{{ path('index_index', {searchService: service.service} )}}" title="">{{ service.service }}</a></li>
-									{% endfor %}
-								</ul>
-							</div>
-						</div><!-- Widget -->
-					</div>
-					<div class="col-md-4 column">
+					<div class="col-md-6 column">
 						<div class="widget">
 							<h3 class="footer-title">CONTACT US</h3>
 							<div class="contact-widget">
@@ -148,7 +74,7 @@
 									<li>
 										<i class="la la-envelope"></i>
 										<span>E-mail Address</span>
-										<span><a href="mailto:ratemyshopper@gmail.com">ratemyshopper@gmail.com</a></span>
+										<span><a href="mailto:bklein73@gmail.com">bklein73@gmail.com</a></span>
 									</li>
 								</ul>
 							</div>
@@ -157,62 +83,11 @@
 				</div>
 			</div>
 			<div class="bottom-line">
-				<span>Copyright Cognicio Technology Parners, LLC © 2016. All Rights Reserved</span>
+				<span>Copyright Ben Klein © 2021. All Rights Reserved</span>
 			</div>
 		</div>
 	</footer>
 	
-	<div class="account-popup-sec">
-		<div class="acount-popup login-popup">
-			<span class="close-popup"><i class="la la-close"></i></span>
-			<h3>LOGIN</h3>
-			<form action="{{ path('index_login') }}" method="post">
-				<input name="submitted" type="hidden" value="1" />
-				<div class="field-form">
-					<input name="email" class="effect-16" type="text" placeholder="">
-		            <label>E-Mail Address</label>
-		            <span class="focus-border"></span>
-				</div>
-				<div class="field-form">
-					<input name="password" class="effect-16" type="password" placeholder="">
-		            <label>Password</label>
-		            <span class="focus-border"></span>
-				</div>
-				<a href="{{ path('index_passwordreset') }}" title="">Lost your password</a>
-				<button type="submit">LOGIN</button>
-			</form>
-		</div>
-		<div class="acount-popup register-popup">
-			<span class="close-popup"><i class="la la-close"></i></span>
-			<h3>REGISTER</h3>
-			<form action="{{ path('index_register') }}" method="post">
-				<input name="submitted" type="hidden" value="1" />
-				<div class="field-form">
-					<input name="firstname" class="effect-16" type="text" placeholder="">
-		            <label>First Name</label>
-		            <span class="focus-border"></span>
-				</div>
-				<div class="field-form">
-					<input name="lastname" class="effect-16" type="text" placeholder="">
-		            <label>Last Name</label>
-		            <span class="focus-border"></span>
-				</div>
-				<div class="field-form">
-					<input name="email" class="effect-16" type="text" placeholder="">
-		            <label>E-Mail Address</label>
-		            <span class="focus-border"></span>
-				</div>
-				<div class="field-form">
-					<input name="password" class="effect-16" type="password" placeholder="">
-		            <label>Password</label>
-		            <span class="focus-border"></span>
-				</div>
-				<button type="submit">REGISTER NOW</button>
-				{# <p>By clicking on “Register Now” button you are accepting the <a href="#" title="">Terms & Conditions</a> </p> #}
-			</form>
-		</div>
-	</div>
-
 </div>
 
 <!-- Script -->
